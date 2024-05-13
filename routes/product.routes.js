@@ -8,15 +8,13 @@ const {
   deleteProduct,
 } = require("../controllers/product.controller");
 const validateToken = require("../middleware/validedTokenHandler");
+router.use(validateToken);
 
-router
-  .route("/")
-  .post(validateToken, createProduct)
-  .get(validateToken, getAllProduct); //create Single product //get All productr
+router.route("/").post(createProduct).get(getAllProduct); //create Single product //get All productr
 router
   .route("/:id")
-  .get(validateToken, getSingleProduct)
-  .put(validateToken, updateProduct)
-  .delete(validateToken, deleteProduct); //get Single product //update Single product //delete Single product
+  .get(getSingleProduct)
+  .put(updateProduct)
+  .delete(deleteProduct); //get Single product //update Single product //delete Single product
 
 module.exports = router;

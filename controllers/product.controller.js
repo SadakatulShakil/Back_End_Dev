@@ -14,15 +14,26 @@ const createProduct = asyncHandler(async (request, response) => {
     name,
     quantity,
     price,
-    image,
+    user_id: request.user.id,
   });
-  response.status(200).json(product);
+
+  const responseData = {
+    status: "SUCCESS",
+    data: product,
+    message: "Product add successfully",
+  };
+  response.status(200).json(responseData);
 });
 
 //get all products
 const getAllProduct = asyncHandler(async (request, response) => {
-  const product = await Product.find(request.body);
-  response.status(200).json(product);
+  const product = await Product.find({ user_id: request.user.id });
+  const responseData = {
+    status: "SUCCESS",
+    data: product,
+    message: "Product List",
+  };
+  response.status(200).json(responseData);
 });
 
 //get single products
@@ -34,7 +45,12 @@ const getSingleProduct = asyncHandler(async (request, response) => {
     response.status(404);
     throw new Error("Product not found");
   }
-  response.status(200).json(product);
+  const responseData = {
+    status: "SUCCESS",
+    data: product,
+    message: "Product details",
+  };
+  response.status(200).json(responseData);
 });
 
 //update product
@@ -47,7 +63,12 @@ const updateProduct = asyncHandler(async (request, response) => {
     throw new Error("Product not found");
   } else {
     const updatedProduct = await Product.findById(id);
-    response.status(200).json(updatedProduct);
+    const responseData = {
+      status: "SUCCESS",
+      data: updatedProduct,
+      message: "Product updated",
+    };
+    response.status(200).json(responseData);
   }
 });
 
