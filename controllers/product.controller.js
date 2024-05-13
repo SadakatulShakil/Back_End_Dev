@@ -45,6 +45,10 @@ const getSingleProduct = asyncHandler(async (request, response) => {
     response.status(404);
     throw new Error("Product not found");
   }
+  if (product.user_id.toString() !== request.user.id) {
+    response.status(403);
+    throw new Error("User is Unauthorized");
+  }
   const responseData = {
     status: "SUCCESS",
     data: product,
@@ -58,6 +62,10 @@ const getSingleProduct = asyncHandler(async (request, response) => {
 const updateProduct = asyncHandler(async (request, response) => {
   const { id } = request.params;
   const product = await Product.findByIdAndUpdate(id, request.body);
+  if (product.user_id.toString() !== request.user.id) {
+    response.status(403);
+    throw new Error("User is Unauthorized");
+  }
   if (!product) {
     response.status(404);
     throw new Error("Product not found");
@@ -68,6 +76,7 @@ const updateProduct = asyncHandler(async (request, response) => {
       data: updatedProduct,
       message: "Product updated",
     };
+
     response.status(200).json(responseData);
   }
 });
@@ -76,6 +85,10 @@ const updateProduct = asyncHandler(async (request, response) => {
 const deleteProduct = asyncHandler(async (request, response) => {
   const { id } = request.params;
   const product = await Product.findByIdAndDelete(id);
+  if (product.user_id.toString() !== request.user.id) {
+    response.status(403);
+    throw new Error("User is Unauthorized");
+  }
   if (!product) {
     response.status(404);
     throw new Error("Product not found");
