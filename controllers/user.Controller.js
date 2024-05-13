@@ -101,6 +101,7 @@ const loginUser = asyncHandler(async (request, response) => {
         user: {
           name: user.name,
           email: user.email,
+          phone: user.phone,
           id: user.id,
         },
       },
@@ -127,7 +128,22 @@ const loginUser = asyncHandler(async (request, response) => {
 
 //User Profile
 const userProfile = asyncHandler(async (request, response) => {
-  response.json({ message: "Profile info" });
+  if (request.user) {
+    const responseData = {
+      status: "SUCCESS",
+      data: {
+        id: request.user.id,
+        name: request.user.name,
+        email: request.user.email,
+        phone: request.user.phone,
+      },
+      message: "Profile data",
+    };
+    response.status(200).json(responseData);
+  } else {
+    response.status(500);
+    throw new Error("Token is required!");
+  }
 });
 
 module.exports = {
